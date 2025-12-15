@@ -3,88 +3,69 @@ import axios from "axios";
 import cors from "cors";
 
 const app = express();
-app.use(cors({
-  origin: "*"
-}));
+app.use(cors());
 app.use(express.json());
 
-
-const ACCESS_TOKEN = process.env.INVICTUS_API_TOKEN;
+const API_TOKEN = process.env.INVICTUS_API_TOKEN;
+const BASE_URL = "https://api.invictuspay.app.br/api/public/v1";
 
 // Criar PIX
 app.post("/criar-pix", async (req, res) => {
   try {
     const response = await axios.post(
-      "https://api.invictuspay.app.br/api/public/v1/transactions",
+      `${BASE_URL}/transactions?api_token=${API_TOKEN}`,
       {
-        transaction_amount: 14.87,
-        description: "Pagamento PIX",
-        payment_method_id: "pix",
-        payer: { email: "comprador@teste.com" }
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`
-        }
+        amount: 1487, // centavos
+        offer_hash: "SEU_OFFER_HASH_AQUI",
+        payment_method: "pix",
+        customer: {
+          name: "Cliente Teste",
+          email: "cliente@email.com",
+          phone_number: "21999999999",
+          document: "09115751031",
+          street_name: "Rua Teste",
+          number: "123",
+          neighborhood: "Centro",
+          city: "Rio de Janeiro",
+          state: "RJ",
+          zip_code: "20000000"
+        },
+        cart: [
+          {
+            product_hash: "HASH_DO_PRODUTO",
+            title: "Produto Teste",
+            price: 1487,
+            quantity: 1,
+            operation_type: 1,
+            tangible: false
+          }
+        ],
+        installments: 1,
+        expire_in_days: 1,
+        transaction_origin: "api"
       }
     );
 
-    const pix = response.data.point_of_interaction.transaction_data;
-
-    res.json({
-      payment_id: response.data.id,
-      qr_code: pix.qr_code,
-      qr_base64: pix.qr_code_base64
-    });
-  } catch (e) {
-  console.error("ERRO COMPLETO:", {
-    message: e.message,
-    response: e.response?.data,
-    status: e.response?.status
-  });
-
-  res.status(500).json({
-    error: "Erro ao criar PIX",
-    detalhe: e.response?.data || e.message
-  });
+    res.json(response.data);
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Erro ao criar PIX" });
   }
 });
 
-// Ver status
-app.get("/status/:id", async (req, res) => {
+// Status da transação
+app.get("/status/:hash", async (req, res) => {
   try {
-    const { id } = req.params;
     const response = await axios.get(
-      `https://api.invictuspay.app.br/api/public/v1/transactions/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`
-        }
-      }
+      `${BASE_URL}/transactions/${req.params.hash}?api_token=${API_TOKEN}`
     );
 
     res.json({ status: response.data.status });
-  } catch {
-    res.status(500).json({ error: "Erro status" });
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao consultar status" });
   }
 });
 
-app.get("/", (req, res) => {
-  res.send("Backend PIX rodando");
+app.listen(3000, () => {
+  console.log("✅ Backend PIX rodando na porta 3000");
 });
-
-app.listen(process.env.PORT || 3000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
