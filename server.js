@@ -5,9 +5,6 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.get("/teste", (req, res) => {
-  res.json({ ok: true });
-});
 
 
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
@@ -66,4 +63,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
