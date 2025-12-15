@@ -52,6 +52,22 @@ app.post("/criar-pix", async (req, res) => {
   }
 });
 
+app.get("/teste-token", async (req, res) => {
+  try {
+    console.log("TOKEN USADO:", process.env.INVICTUS_API_TOKEN);
+
+    const response = await axios.get(
+      `https://api.invictuspay.app.br/api/public/v1/me?api_token=${process.env.INVICTUS_API_TOKEN}`
+    );
+
+    res.json(response.data);
+  } catch (err) {
+    res.status(500).json({
+      erro: err.response?.data || err.message
+    });
+  }
+});
+
 // Ver status
 app.get("/status/:id", async (req, res) => {
   try {
@@ -76,5 +92,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
