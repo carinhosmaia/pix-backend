@@ -17,11 +17,11 @@ app.post("/criar-pix", async (req, res) => {
     const response = await axios.post(
       "https://api.invictuspay.com.br/api/public/v1/transactions",
       {
-         "amount": 14.87,
-         "payment_method": "pix",
-         "customer": {
-         "email": "comprador@teste.com"
-       }
+  transaction_amount: 14.87,
+  payment_method_id: "pix",
+  payer: {
+    email: "comprador@teste.com"
+      }
     },
       {
         headers: {
@@ -75,6 +75,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
 
