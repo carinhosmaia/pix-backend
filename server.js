@@ -9,7 +9,7 @@ app.use(cors({
 app.use(express.json());
 
 
-const ACCESS_TOKEN = process.env.api_token;
+const ACCESS_TOKEN = process.env.INVICTUS_API_TOKEN;
 
 // Criar PIX
 app.post("/criar-pix", async (req, res) => {
@@ -74,6 +74,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
 
