@@ -37,9 +37,18 @@ app.post("/criar-pix", async (req, res) => {
       qr_base64: pix.qr_code_base64
     });
   } catch (e) {
-    res.status(500).json({ error: "Erro ao criar PIX" });
-  }
-});
+  console.error("ERRO COMPLETO:", {
+    message: e.message,
+    response: e.response?.data,
+    status: e.response?.status
+  });
+
+  res.status(500).json({
+    error: "Erro ao criar PIX",
+    detalhe: e.response?.data || e.message
+  });
+}
+
 
 // Ver status
 app.get("/status/:id", async (req, res) => {
@@ -65,6 +74,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
 
