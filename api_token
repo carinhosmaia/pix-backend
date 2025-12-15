@@ -20,22 +20,22 @@ const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 app.post("/criar-pix", async (req, res) => {
   try {
     const response = await axios.post(
-      "https://api.invictuspay.com.br/api/public/v1/transactions",
+      "https://api.invictuspay.app.br/api/public/v1/transactions",
       {
-        transaction_amount: 14.87,
-        description: "Pagamento PIX",
-        payment_method_id: "pix",
-        payer: {
-          email: "comprador@teste.com"
-        }
-      },
+  "amount": 14.87,
+  "payment_method": "pix",
+  "customer": {
+    "email": "comprador@teste.com"
+  }
+}
+,
       {
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`,
           "Content-Type": "application/json"
         }
       }
-    );
+    });
 
     const pix = response.data.point_of_interaction.transaction_data;
 
@@ -66,7 +66,7 @@ app.get("/status/:id", async (req, res) => {
     const { id } = req.params;
 
     const response = await axios.get(
-      `https://api.invictuspay.com.br/api/public/v1/transactions/${id}`,
+      `https://api.invictuspay.app.br/api/public/v1/transactions/${id}`,
       {
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`
@@ -99,10 +99,11 @@ app.get("/", (req, res) => {
 // ===============================
 const PORT = process.env.PORT || 3000;
 
-  console.log("TOKEN USADO:", API_TOKEN);
+console.log("TOKEN EXISTE?", !!ACCESS_TOKEN);
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
 
 
