@@ -25,7 +25,7 @@ app.post("/criar-pix", async (req, res) => {
     },
       {
         headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
           "Content-Type": "application/json"
         }
       }
@@ -76,17 +76,3 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
