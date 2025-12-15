@@ -47,7 +47,8 @@ app.post("/criar-pix", async (req, res) => {
     error: "Erro ao criar PIX",
     detalhe: e.response?.data || e.message
   });
-
+  }
+});
 
 // Ver status
 app.get("/status/:id", async (req, res) => {
@@ -73,6 +74,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
 
