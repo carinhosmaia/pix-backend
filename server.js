@@ -15,7 +15,7 @@ const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 app.post("/criar-pix", async (req, res) => {
   try {
     const response = await axios.post(
-      "https://api.invictuspay.com.br/api/public/v1",
+      "https://api.invictuspay.com.br/api",
       {
         transaction_amount: 14.87,
         description: "Pagamento PIX",
@@ -46,7 +46,7 @@ app.get("/status/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const response = await axios.get(
-      `https://api.invictuspay.com.br/api/public/v1/${id}`,
+      `https://api.invictuspay.com.br/api/public/${id}`,
       {
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`
@@ -65,6 +65,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
 
 
 
